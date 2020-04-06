@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     // TODO: check if "n" is between MIN and MAX
 
     parentIdA = parentIdB = (int)getpid();
-    printf("\Inverted V tree with n=%d\n", n);
+    printf("Inverted V process tree with n=%d\n", n);
     printf("Process AB has PID=%d\n", parentIdA);
 
     if (n > 0)
