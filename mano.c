@@ -4,51 +4,98 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-int main(int argc, char *argv[])
+
+void process_single_tree(char *row, int level, int n)
 {
-    pid_t pidA = 0, pidB = 0;
-    int n, i, parentIdA, parentIdB, status;
+    // printf("process_tree(row: %s, level: %d, n: %d)\n", row, level, n);
+    
+    int pid;
+    int status;
 
-    // TODO: check if "argv"'s exist
-    n = atoi(argv[1]);
-    // TODO: check if "n" is between MIN and MAX
-
-    parentIdA = parentIdB = (int)getpid();
-    printf("Inverted V process tree with n=%d\n", n);
-    printf("Process AB has PID=%d\n", parentIdA);
-
-    if (n > 0)
+    if (n > level)
     {
-        for (i = 1; i <= n; i += 1)
+        exit(0);
+    }
+    else
+    {
+        pid = fork();
+        switch (pid)
         {
-            pidA = fork();
+        case -1:
+            printf("fork failed\n");
+            break;
+        case 0:
+            printf("Process %s%d %d, from %d\n", row, n, getpid(), getppid());
+            n += 1;
+            process_single_tree(row, level, n);
+            break;
 
-            if ((int)pidA > 0)
-            {
-                // printf("> %d | %d | %d | %d\n", i, (int)pidA, (int)getpid(), (int)getppid());
-                printf("Process A%d has PID=%d and PPID=%d\n", i, (int)pidA, (int)getpid());
-                break; // don't print child
-            }
-            else
-            {
-                //waitpid(pidA, &status, 0);
+        default:
+            break;
+        }
+        
+        wait(&status);
+    }
+}
 
-                pidB = fork();
+void process_double_tree(int level, int n)
+{
+    // printf("process_tree_2(level: %d, n: %d)\n", level, n);
 
-                if ((int)pidB > 0)
-                {
-                    // printf("> %d | %d | %d | %d\n", i, (int)pidA, (int)getpid(), (int)getppid());
-                    printf("Process B%d has PID=%d and PPID=%d\n", i, (int)pidB, i == 1 ? (int)getppid() : (int)getppid());
-                    break; // don't print child
-                }
-                else
-                {
-                    // printf("> %d | %d | %d | %d\n", i, (int)pidA, (int)getpid(), (int)getppid);
-                    waitpid(pidB, &status, 0);
-                }
-            }
+    int i;
+    int index = 2;
+    int pid;
+    int status;
+    char *row;
+
+    for (i = 1; i <= index; i++)
+    {
+        row = i == 1 ? "A" : "B";
+        if (n > 1)
+        {
+            // printf("fork exit(0)\n");
+            exit(0);
+        } else {
+            // printf("for(i: %d, index: %d, n: %d, row: %s)\n", i, index, n, row);
+        }
+
+        pid = fork();
+        switch (pid)
+        {
+        case -1:
+            printf("fork failed\n");
+            break;
+        case 0:
+            // printf("Process %s%d (%d/%d) %d, from %d\n", row, n, level, index, getpid(), getppid());
+            printf("Process %s%d %d, from %d\n", row, n, getpid(), getppid());
+            n += 1;
+            process_single_tree(row, level, n);
+            break;
+
+        default:
+            break;
         }
     }
+    for (i = 0; i < index; i++)
+    {
+        wait(&status);
+    }
+}
 
-    return 0;
+// based on https://stackoverflow.com/questions/46250145
+int main(int argc, char *argv[])
+{
+    int level = 0;
+    int n = 1;
+
+    // TODO: check if "argv"'s exist
+    level = atoi(argv[1]);
+    // TODO: check if "n" is between MIN and MAX
+
+    printf("Inverted V process tree with n=%d\n", level);
+    printf("Process AB has PID=%d\n", getpid());
+    
+    if(level > 0) {
+        process_double_tree(level, n);
+    }
 }
