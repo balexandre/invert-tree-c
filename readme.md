@@ -3,8 +3,11 @@ Simple project to get `fork()` tree
 to run
 
 ```bash
+cd ./src
 gcc -Wall -o mano mano.c && ./mano 5
 ```
+
+where `5` is how many interactions one want to run (from 0 to 32, as defined in the source)
 
 ## Objective
 
@@ -12,7 +15,7 @@ to create an inverted V process tree like
 
 ![](https://i.imgur.com/UKip1WM.png)
 
-where the output, if `n=5` would be 
+where the output, if `n=5` should be
 
 ```bash
 Inverted V process tree with n=5:
