@@ -32,6 +32,6 @@ Process A4 has PID=12940 and PPID=12937
 Process A5 has PID=12941 and PPID=12940
 ```
 
-##
+## Tests
 
 Test are written using [Check](https://libcheck.github.io/check/index.html) framework
