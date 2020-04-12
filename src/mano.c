@@ -58,7 +58,7 @@ void process_single_tree(char *colLetter, int maxInteractions, int currentRow)
         printf("fork failed\n");
         break;
     case 0:
-        printf("Process %s%d %d, from %d\n", colLetter, currentRow, getpid(), getppid());
+        printf("Process %s%d %d, from %d\n", colLetter, currentRow, (int)getpid(), (int)getppid());
         currentRow += 1;
             // process 1 fork and his child
         process_single_tree(colLetter, maxInteractions, currentRow);
@@ -98,7 +98,7 @@ void process_double_tree(int maxInteractions, int currentRow)
             printf("fork failed\n");
             break;
         case 0:
-            printf("Process %s%d %d, from %d\n", colLetter, currentRow, getpid(), getppid());
+            printf("Process %s%d %d, from %d\n", colLetter, currentRow, (int)getpid(), (int)getppid());
             currentRow += 1;
             // process 1 fork and his child
             process_single_tree(colLetter, maxInteractions, currentRow);
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     validateInteractions(interactions);
 
     printf("Inverted V process tree with n=%d\n", interactions);
-    printf("Process AB has PID=%d\n", getpid());
+    printf("Process AB has PID=%d\n", (int)getpid());
 
     // there are levels to process
     if (interactions > 0)
